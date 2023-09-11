@@ -14,9 +14,6 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <style>
-#app{
-  padding: 0;
-}
 .content {
   display: block;
 }

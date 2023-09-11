@@ -5,7 +5,7 @@
         </qr-stream>
     </div>
     <div class="result">
-        Result: {{ data }}
+        <p>Result: {{ data }}</p>
     </div>
 </template>
    
@@ -25,8 +25,10 @@ export default {
     },
     methods: {
         onDecode(data) {
-            this.data = data
-        }
+            this.data = data;
+        },
+    },
+    mounted() {
     }
 };
 </script>
