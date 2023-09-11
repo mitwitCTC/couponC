@@ -29,18 +29,18 @@
       <div class="modal" tabindex="-1" id="discountModal" ref="discountModal">
         <div class="modal-dialog modal-sm modal-dialog-centered">
           <div class="modal-content">
-
             <div class="modal-body">
-              {{ discount }} <br>
+              <!-- 掃描折抵 -->
               <div v-if="isScan" class="scan d-flex flex-column align-items-center">
-                <!-- <QrcodeScanner @send-data="getQrcode"></QrcodeScanner> -->
                 <div class="stream">
-                  <qr-stream @decode="onDecode" class="mb">
+                  <qr-stream @init="onInit" @decode="onDecode" class="mb">
                     <div style="color: red;" class="frame"></div>
                   </qr-stream>
                 </div>
-
+                <p v-if="error" class="text-warning">{{ error }}</p>
+                <p v-else>掃描中...</p>
               </div>
+              <!-- 輸入折抵 -->
               <div v-else>
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">折扣券號碼或發票號碼<span
@@ -90,10 +90,10 @@ export default {
         qrcode: "",
         amount: ""
       },
+      error: ""
     }
   },
   components: {
-    // QrcodeScanner
     QrStream,
     QrCapture,
     QrDropzone,
@@ -102,30 +102,50 @@ export default {
     // 搜尋車號取得停車明細
     search() {
       this.bill.plate = localStorage.getItem('plate');
-      console.log(this.discount);
     },
     openModal() {
       const discountModal = this.$refs.discountModal;
       const modal = new bootstrap.Modal(discountModal);
       modal.show();
     },
+    hideModal(){
+      const myModal = this.$refs.discountModal;
+      const modal = bootstrap.Modal.getInstance(myModal);
+      modal.hide();
+    },
     // 切換掃描或手動輸入
     scanInput() {
       this.isScan = !this.isScan;
     },
+    async onInit(promise) {
+      try {
+        await promise;
+      } catch (error) {
+        if (error.name === "NotAllowedError") {
+          this.error = "您需要允許鏡頭權限";
+        } else if (error.name === "NotFoundError") {
+          this.error = "本裝置無鏡頭";
+        } else if (error.name === "NotSupportedError") {
+          this.error = "操作失敗(https)";
+        } else if (error.name === "NotReadableError") {
+          this.error = "相機正在使用中?";
+        } else if (error.name === "OverconstrainedError") {
+          this.error = "裝置相機未安裝成功";
+        } else if (error.name === "StreamApiNotSupportedError") {
+          this.error = "請嘗試使用別的瀏覽器操作";
+        }
+      }
+    },
     onDecode(data) {
-      this.discount.qrcode = data;
+      // 折抵券
+      this.discount.qrcode = 'coupon://' + data;
+      this.discount.amount = '0';
+      this.getDiscount();
     },
     getDiscount() {
-      console.log(this.discount);
-      this.bill.fee = '50';
-      // const discountModal = this.$refs.discountModal;
-      // if (discountModal) {
-      //   const bootstrapModal = new bootstrap.Modal(discountModal);
-      //   bootstrapModal.hide();
-      // }
-
-      // myModal.hide();
+      this.bill.fee = 50
+      this.discount = {};
+      this.hideModal();
       // 折抵後重新執行搜尋車號取得停車明細
       this.search();
     }
