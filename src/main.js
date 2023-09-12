@@ -5,6 +5,8 @@ import { createPinia } from 'pinia'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 
 import App from './App.vue'
 import router from './router'
@@ -16,4 +18,5 @@ import './assets/all.scss'
 app.use(createPinia())
 app.use(router)
 app.use(QrReader);
+app.use(VueAxios, axios);
 app.mount('#app')

@@ -6,6 +6,7 @@
     <div class="plate-img">{{ bill.plate }}</div>
     <section class="bill p-4">
       <!-- 費用 -->
+      <p class="text-center fs-3" :class="{ 'text-success' : discountSuccess, 'text-warning' : !discountSuccess}">{{ discountMessage }}</p>
       <section class="border-bottom">
         <p class="text-secondary">應繳金額</p>
         <p class="text-center">NT$ <span class="fs-3">{{ bill.fee }}</span></p>
@@ -75,22 +76,27 @@
 
 <script>
 import { QrStream, QrCapture, QrDropzone } from 'vue3-qr-reader';
-
+const Api = 'https://06f2-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {
+      stationIndex: 359,
+      plate: "",
       bill: {
-        station: "群和智慧MitWit",
+        station: "",
         plate: "",
-        fee: "180",
-        arr_time: "2023-09-05 13:30:00"
+        fee: "",
+        arr_time: ""
       },
       isScan: true,
       discount: {
         qrcode: "",
         amount: ""
       },
-      error: ""
+      error: "", // 相機權限錯誤
+      discountSuccess: null,
+      discountMessage: '' // 折抵回傳訊息
+
     }
   },
   components: {
@@ -99,16 +105,28 @@ export default {
     QrDropzone,
   },
   methods: {
+    // 取車號
+    getPlate() {
+      this.plate = localStorage.getItem('plate');
+    },
     // 搜尋車號取得停車明細
-    search() {
-      this.bill.plate = localStorage.getItem('plate');
+    search(plate) {
+      this.getPlate();
+      const searchApi = `${Api}/qrcode/search`;
+      this.$http
+        .post(searchApi, { "stationIndex": this.stationIndex, "plate": this.plate })
+        .then((response) => {
+          if (response) {
+            this.bill = response.data;
+          }
+        })
     },
     openModal() {
       const discountModal = this.$refs.discountModal;
       const modal = new bootstrap.Modal(discountModal);
       modal.show();
     },
-    hideModal(){
+    hideModal() {
       const myModal = this.$refs.discountModal;
       const modal = bootstrap.Modal.getInstance(myModal);
       modal.hide();
@@ -138,16 +156,30 @@ export default {
     },
     onDecode(data) {
       // 折抵券
-      this.discount.qrcode = 'coupon://' + data;
-      this.discount.amount = '0';
+      this.discount.qrcode = data;
+      this.discount.amount = 0;
       this.getDiscount();
     },
     getDiscount() {
-      this.bill.fee = 50
-      this.discount = {};
-      this.hideModal();
-      // 折抵後重新執行搜尋車號取得停車明細
-      this.search();
+      const getDiscountApi = `${Api}/qrcode/discount`
+      this.$http
+        .post(getDiscountApi, { qrcode: "coupon://" + this.discount.qrcode, amount: this.amount })
+        .then((response) => {
+          this.discountMessage = response.data.message;
+          if (response.data.message == '折抵成功.') {
+            this.discountSuccess = true;
+            this.discount = {};
+            this.hideModal();
+            // 折抵後重新執行搜尋車號取得停車明細
+            this.search();
+          } else {
+            this.discountSuccess = false;
+            this.discount = {};
+            this.hideModal();
+            // 折抵後重新執行搜尋車號取得停車明細
+            this.search();
+          }
+        })
     }
   },
   mounted() {

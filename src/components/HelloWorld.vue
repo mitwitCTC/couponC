@@ -1,13 +1,13 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import router from '../router';
-
+const Api = 'https://06f2-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {
       isLoading: false,
       plate: "",
-      dbPlate: 'AAA-1111',
+      stationIndex: 359,
       hasPlate: true
     }
   },
@@ -17,13 +17,17 @@ export default {
   },
   methods: {
     search(plate) {
-      if (this.plate === this.dbPlate) {
-        localStorage.setItem('plate', this.plate);
-        router.push('/bill');
-        this.hasPlate = true
-      } else {
-        this.hasPlate = false
-      }
+      const searchApi = `${Api}/qrcode/search`;
+      this.$http
+        .post(searchApi, { "stationIndex": this.stationIndex, "plate": this.plate })
+        .then((response) => {
+          if (response.data.arr_time) {
+            localStorage.setItem('plate', response.data.plate);
+            router.push('/bill');
+          } else {
+            this.hasPlate = false;
+          }
+        })
     }
   }
 }
