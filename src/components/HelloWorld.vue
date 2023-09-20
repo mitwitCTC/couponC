@@ -17,15 +17,18 @@ export default {
   },
   methods: {
     search(plate) {
+      this.isLoading = true;
       const searchApi = `${Api}/qrcode/search`;
       this.$http
         .post(searchApi, { "stationIndex": this.stationIndex, "plate": this.plate })
         .then((response) => {
           if (response.data.arr_time) {
             localStorage.setItem('plate', response.data.plate);
+            this.isLoading = false;
             router.push('/bill');
           } else {
             this.hasPlate = false;
+            this.isLoading = false;
           }
         })
     }
@@ -39,6 +42,7 @@ export default {
 <template>
   <main>
     <div class="bg-dark text-white text-center py-3">停車費查詢</div>
+    <div v-if="isLoading" class="loading"></div>
     <div class="container mt-5">
       <label for="exampleInputEmail1" class="form-label">車牌號碼</label>
       <div class="d-flex">
@@ -51,4 +55,13 @@ export default {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.loading {
+  background: #FFFFFF;
+  background-image: url(../../public/Spinner-1s-200px.svg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100vw;
+  height: 100vh;
+}
+</style>
