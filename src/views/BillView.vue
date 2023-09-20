@@ -6,7 +6,8 @@
     <div class="plate-img">{{ bill.plate }}</div>
     <section class="bill p-4">
       <!-- 費用 -->
-      <p class="text-center fs-3" :class="{ 'text-success' : discountSuccess, 'text-warning' : !discountSuccess}">{{ discountMessage }}</p>
+      <p class="text-center fs-3" :class="{ 'text-success': discountSuccess, 'text-warning': !discountSuccess }">{{
+        discountMessage }}</p>
       <section class="border-bottom">
         <p class="text-secondary">應繳金額</p>
         <p class="text-center">NT$ <span class="fs-3">{{ bill.fee }}</span></p>
@@ -24,7 +25,7 @@
       <!-- 按鈕 -->
       <div class="btns d-flex justify-content-around">
         <button class="btn btn-primary" id="toggleMyModal" @click="openModal()">發票折抵</button>
-        <button class="btn" :class="bill.fee == 0 ? 'btn-secondary' : 'btn-primary'">繳費離場</button>
+        <button class="btn" :class="bill.fee == 0 ? 'btn-secondary' : 'btn-primary'" @click="pay">繳費離場</button>
       </div>
       <!-- 折抵 modal -->
       <div class="modal" tabindex="-1" id="discountModal" ref="discountModal">
@@ -76,7 +77,7 @@
 
 <script>
 import { QrStream, QrCapture, QrDropzone } from 'vue3-qr-reader';
-const Api = 'https://06f2-122-116-23-30.ngrok-free.app';
+const Api = 'https://130b-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {
@@ -95,8 +96,7 @@ export default {
       },
       error: "", // 相機權限錯誤
       discountSuccess: null,
-      discountMessage: '' // 折抵回傳訊息
-
+      discountMessage: '', // 折抵回傳訊息
     }
   },
   components: {
@@ -180,11 +180,17 @@ export default {
             this.search();
           }
         })
+    },
+    pay() {
+      parent.window.location.replace("https://utaggoif.utaggo.com.tw/payment/startpay01");
     }
   },
   mounted() {
     this.search(); // 初始搜尋車號取得停車明細
-  }
+  },
+  // created() {
+  //   this.stationIndex = this.$route.params.stationIndex;
+  // }
 }
 </script>
 

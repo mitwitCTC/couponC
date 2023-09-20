@@ -1,7 +1,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import router from '../router';
-const Api = 'https://06f2-122-116-23-30.ngrok-free.app';
+const Api = 'https://130b-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {
@@ -29,7 +29,10 @@ export default {
           }
         })
     }
-  }
+  },
+  // created(){
+  //   this.stationIndex = this.$route.params.stationIndex;
+  // }
 }
 </script>
 
