@@ -81,7 +81,7 @@ const Api = 'https://7e0a-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {
-      stationIndex: 359,
+      stationIndex: null,
       plate: "",
       bill: {
         station: "",
@@ -188,9 +188,9 @@ export default {
   mounted() {
     this.search(); // 初始搜尋車號取得停車明細
   },
-  // created() {
-  //   this.stationIndex = this.$route.params.stationIndex;
-  // }
+  created() {
+    this.stationIndex = this.$route.params.stationIndex;
+  }
 }
 </script>
 

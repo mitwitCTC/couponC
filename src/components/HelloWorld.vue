@@ -7,8 +7,8 @@ export default {
     return {
       isLoading: false,
       plate: "",
-      stationIndex: 359,
-      hasPlate: true
+      hasPlate: true,
+      stationIndex: null,
     }
   },
   components: {
@@ -25,7 +25,7 @@ export default {
           if (response.data.arr_time) {
             localStorage.setItem('plate', response.data.plate);
             this.isLoading = false;
-            router.push('/bill');
+            router.push(`${this.stationIndex}/bill`);
           } else {
             this.hasPlate = false;
             this.isLoading = false;
@@ -33,9 +33,9 @@ export default {
         })
     }
   },
-  // created(){
-  //   this.stationIndex = this.$route.params.stationIndex;
-  // }
+  created(){
+    this.stationIndex = this.$route.params.stationIndex;
+  }
 }
 </script>
 
