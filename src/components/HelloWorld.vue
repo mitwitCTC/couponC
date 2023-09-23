@@ -58,7 +58,7 @@ export default {
 <style scoped>
 .loading {
   background: #FFFFFF;
-  background-image: url(/public/Spinner-1s-200px.svg);
+  background-image: url(/Spinner-1s-200px.svg);
   background-repeat: no-repeat;
   background-position: top center;
   width: 100vw;
