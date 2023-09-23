@@ -77,7 +77,7 @@
 
 <script>
 import { QrStream, QrCapture, QrDropzone } from 'vue3-qr-reader';
-const Api = 'https://130b-122-116-23-30.ngrok-free.app';
+const Api = 'https://7e0a-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {

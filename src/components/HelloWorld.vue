@@ -1,7 +1,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import router from '../router';
-const Api = 'https://130b-122-116-23-30.ngrok-free.app';
+const Api = 'https://7e0a-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {
@@ -58,7 +58,7 @@ export default {
 <style scoped>
 .loading {
   background: #FFFFFF;
-  background-image: url(../../public/Spinner-1s-200px.svg);
+  background-image: url(/public/Spinner-1s-200px.svg);
   background-repeat: no-repeat;
   background-position: top center;
   width: 100vw;
