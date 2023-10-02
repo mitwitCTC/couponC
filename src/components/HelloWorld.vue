@@ -6,6 +6,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      plate1:"",
+      plate2:"",
       plate: "",
       hasPlate: true,
       stationIndex: null,
@@ -19,6 +21,7 @@ export default {
     search(plate) {
       this.isLoading = true;
       const searchApi = `${Api}/qrcode/search`;
+      this.plate = this.plate1 + "-" + this.plate2;
       this.$http
         .post(searchApi, { "stationIndex": this.stationIndex, "plate": this.plate })
         .then((response) => {
@@ -44,9 +47,11 @@ export default {
     <div class="bg-dark text-white text-center py-3">停車費查詢</div>
     <div v-if="isLoading" class="loading"></div>
     <div class="container mt-5">
-      <label for="exampleInputEmail1" class="form-label">車牌號碼</label>
+      <label for="exampleInputEmail1" class="form-label">請輸入車牌號碼</label>
       <div class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="請輸入車牌號碼搜尋(需包含 - )" v-model="plate"
+        <input class="form-control me-2" type="search" v-model="plate1">
+          <span class="fs-5">　-　</span>
+        <input class="form-control me-2" type="search" v-model="plate2"
           @keydown.enter="search(plate)">
         <img src="../assets/icons8-search.svg" alt="search" class="mx-3" @click="search(plate)">
       </div>
