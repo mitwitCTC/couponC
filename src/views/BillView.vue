@@ -77,7 +77,7 @@
 
 <script>
 import { QrStream, QrCapture, QrDropzone } from 'vue3-qr-reader';
-const Api = 'https://7e0a-122-116-23-30.ngrok-free.app';
+const Api = 'https://coupon.mitwit-cre.com.tw';
 export default {
   data() {
     return {
