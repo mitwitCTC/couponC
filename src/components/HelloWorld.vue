@@ -18,6 +18,17 @@ export default {
     RouterLink,
   },
   methods: {
+    // 取場站資訊
+    getStationInfo() {
+      const getStationInfoApi = `${Api}/qrcode/stationInfo`;
+      this.$http
+        .post(getStationInfoApi, { "stationIndex": this.stationIndex })
+        .then((response) => {
+          if (!response.data.ip) {
+            console.warn(response.data.message);
+          }
+        })
+    },
     search(plate) {
       this.isLoading = true;
       const searchApi = `${Api}/qrcode/search`;
@@ -36,8 +47,9 @@ export default {
         })
     }
   },
-  created(){
+  created() {
     this.stationIndex = this.$route.params.stationIndex;
+    this.getStationInfo();
   }
 }
 </script>
@@ -50,9 +62,8 @@ export default {
       <label for="exampleInputEmail1" class="form-label">請輸入車牌號碼</label>
       <div class="d-flex">
         <input class="form-control me-2" type="search" v-model="plate1">
-          <span class="fs-5">　-　</span>
-        <input class="form-control me-2" type="search" v-model="plate2"
-          @keydown.enter="search(plate)">
+        <span class="fs-5">　-　</span>
+        <input class="form-control me-2" type="search" v-model="plate2" @keydown.enter="search(plate)">
         <img src="../assets/icons8-search.svg" alt="search" class="mx-3" @click="search(plate)">
       </div>
       <p v-if="!hasPlate" class="text-warning fs-6 mt-1"><img src="../assets/icons8-info.svg" alt=""> 查無此車號，請重新輸入</p>

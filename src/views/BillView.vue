@@ -163,7 +163,7 @@ export default {
     getDiscount() {
       const getDiscountApi = `${Api}/qrcode/discount`
       this.$http
-        .post(getDiscountApi, { qrcode: "coupon://" + this.discount.qrcode, amount: this.amount })
+        .post(getDiscountApi, { qrcode: this.discount.qrcode, amount: this.amount })
         .then((response) => {
           this.discountMessage = response.data.message;
           if (response.data.message == '折抵成功.') {
