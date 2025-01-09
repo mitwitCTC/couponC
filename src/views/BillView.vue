@@ -23,7 +23,7 @@
           無需繳費，請儘速離場，謝謝！</p>
       </div>
       <!-- 按鈕 -->
-      <div class="btns d-flex justify-content-around">
+      <div v-else class="btns d-flex justify-content-around">
         <button class="btn btn-primary" id="toggleMyModal" @click="openModal()">發票折抵</button>
         <button class="btn" :class="bill.fee == 0 ? 'btn-secondary' : 'btn-primary'" @click="pay">繳費離場</button>
       </div>
@@ -41,6 +41,7 @@
                 </div>
                 <p v-if="error" class="text-warning">{{ error }}</p>
                 <p v-else>掃描中...</p>
+                <p v-if="discountMessage">{{ discountMessage }}</p>
               </div>
               <!-- 輸入折抵 -->
               <div v-else>
@@ -175,8 +176,6 @@ export default {
           } else {
             this.discountSuccess = false;
             this.discount = {};
-            this.hideModal();
-            // 折抵後重新執行搜尋車號取得停車明細
             this.search();
           }
         })

@@ -9,7 +9,7 @@ export default defineConfig({
     // 设置服务器的主机名，可以使用 '0.0.0.0' 使其对外可访问
     host: '0.0.0.0',
   },
-  base: '/couponC',
+  base: '/',
   plugins: [
     vue(),
   ],
