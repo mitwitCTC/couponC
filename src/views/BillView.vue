@@ -14,8 +14,8 @@
       </section>
       <!-- 明細 -->
       <section class="mt-2">
-        <p class="text-secondary">停車地點<span class="text-primary">　{{ bill.station }}</span></p>
-        <p class="text-secondary">進場時間<span class="text-primary">　{{ bill.arr_time }}</span></p>
+        <p class="text-secondary">停車地點<span class="text-primary">{{ bill.station }}</span></p>
+        <p class="text-secondary">進場時間<span class="text-primary">{{ bill.arr_time }}</span></p>
       </section>
       <!-- 無需繳費 -->
       <div v-if="bill.fee == 0" class="warningInfo">
@@ -77,7 +77,8 @@
 </template>
 
 <script>
-import { QrStream, QrCapture, QrDropzone } from 'vue3-qr-reader';
+import { QrStream } from 'vue3-qr-reader';
+import * as bootstrap from 'bootstrap';
 const Api = 'https://coupon.mitwit-cre.com.tw';
 export default {
   data() {
@@ -102,8 +103,6 @@ export default {
   },
   components: {
     QrStream,
-    QrCapture,
-    QrDropzone,
   },
   methods: {
     // 取車號
@@ -111,7 +110,7 @@ export default {
       this.plate = localStorage.getItem('plate');
     },
     // 搜尋車號取得停車明細
-    search(plate) {
+    search() {
       this.getPlate();
       const searchApi = `${Api}/qrcode/search`;
       this.$http
@@ -164,7 +163,7 @@ export default {
     getDiscount() {
       const getDiscountApi = `${Api}/qrcode/discount`
       this.$http
-        .post(getDiscountApi, { qrcode: this.discount.qrcode, amount: this.amount })
+        .post(getDiscountApi, { qrcode: this.discount.qrcode, amount: this.amount, plate: this.plate })
         .then((response) => {
           this.discountMessage = response.data.message;
           if (response.data.message == '折抵成功.') {

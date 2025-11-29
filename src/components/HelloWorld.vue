@@ -1,5 +1,4 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
 import router from '../router';
 const Api = 'https://coupon.mitwit-cre.com.tw';
 export default {
@@ -13,10 +12,6 @@ export default {
       stationIndex: null,
     }
   },
-  components: {
-    RouterView,
-    RouterLink,
-  },
   methods: {
     // 取場站資訊
     getStationInfo() {
@@ -29,7 +24,7 @@ export default {
           }
         })
     },
-    search(plate) {
+    search() {
       this.isLoading = true;
       const searchApi = `${Api}/qrcode/search`;
       this.plate = this.plate1 + "-" + this.plate2;
@@ -62,7 +57,7 @@ export default {
       <label for="exampleInputEmail1" class="form-label">請輸入車牌號碼</label>
       <div class="d-flex">
         <input class="form-control me-2" type="search" v-model="plate1">
-        <span class="fs-5">　-　</span>
+        <span class="fs-5"> - </span>
         <input class="form-control me-2" type="search" v-model="plate2" @keydown.enter="search(plate)">
         <img src="../assets/icons8-search.svg" alt="search" class="mx-3" @click="search(plate)">
       </div>
